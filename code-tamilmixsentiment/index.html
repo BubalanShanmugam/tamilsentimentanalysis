@@ -1,0 +1,314 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sentiment Analysis</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            background-color: #f9f9f9;
+        }
+        .card {
+            background: white;
+            padding: 20px;
+            margin: 10px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px #032f5e;
+            width: 400px;
+        }
+        textarea, input {
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        button {
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+            background-color: #032f5e;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:disabled {
+            background-color: #ccc;
+        }
+        img {
+            width: 100%;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h2>Enter Tamil or Thanglish Text</h2>
+        <textarea id="textInput" placeholder="Enter text here..."></textarea>
+        <div>
+            <input type="checkbox" id="thanglish"> <label for="thanglish">Text is in Thanglish</label>
+        </div>
+        <button onclick="analyzeText()">Analyze Sentiment</button>
+        <p id="sentimentResult"></p>
+        <img id="sentimentChart" src="" style="display: none;"/>
+    </div>
+
+    <div class="card">
+        <h2>Analyze YouTube Video</h2>
+        <input type="text" id="videoUrl" placeholder="Enter YouTube video URL">
+        <button onclick="analyzeYouTube()">Fetch Comments & Analyze</button>
+        <ul id="videoSentiments"></ul>
+    </div>
+
+    <script>
+        const apiBaseUrl = "http://127.0.0.1:8000";
+
+
+        async function analyzeText() {
+            const text = document.getElementById("textInput").value;
+            if (!text) return alert("Please enter some text");
+            
+            document.getElementById("sentimentResult").innerText = "Analyzing...";
+            document.getElementById("sentimentChart").style.display = "none";
+            
+            try {
+                const response = await fetch(`${apiBaseUrl}/analyze`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ text })
+                });
+                const data = await response.json();
+                document.getElementById("sentimentResult").innerText = `Sentiment: ${data.prediction}`;
+                document.getElementById("sentimentChart").src = data.chart_url;
+                document.getElementById("sentimentChart").style.display = "block";
+            } catch (error) {
+                document.getElementById("sentimentResult").innerText = "Error analyzing sentiment";
+            }
+        }
+    </script>
+</body>
+</html>
+ -->
+
+
+
+
+
+
+<!-- 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sentiment Analysis</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f9f9f9;
+        }
+        .card {
+            background: white;
+            padding: 20px;
+            margin: 20px auto;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px #032f5e;
+            width: 400px;
+        }
+        input, button {
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+        button {
+            background-color: #032f5e;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h2>Analyze YouTube Video</h2>
+        <input type="text" id="videoUrl" placeholder="Enter YouTube video URL">
+        <button onclick="analyzeYouTube()">Fetch Comments & Analyze</button>
+        <p id="result"></p>
+    </div>
+
+    <script>
+        async function analyzeYouTube() {
+            const videoUrl = document.getElementById("videoUrl").value;
+            if (!videoUrl) return alert("Please enter a YouTube URL.");
+
+            document.getElementById("result").innerText = "Analyzing...";
+            try {
+                const response = await fetch("http://127.0.0.1:8000/analyze-youtube/", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ url: videoUrl })
+                });
+                const data = await response.json();
+                document.getElementById("result").innerText = JSON.stringify(data, null, 2);
+            } catch (error) {
+                document.getElementById("result").innerText = "Error fetching results.";
+            }
+        }
+    </script>
+</body>
+</html> -->
+
+
+
+
+
+
+
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Tamil & Thanglish Sentiment Analyzer</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f9f9f9;
+      padding: 2rem;
+      max-width: 800px;
+      margin: auto;
+    }
+
+    h1 {
+      color: #333;
+      text-align: center;
+    }
+
+    .section {
+      background: #fff;
+      padding: 1.5rem;
+      margin-top: 2rem;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+
+    input[type="text"], textarea {
+      width: 100%;
+      padding: 0.8rem;
+      margin-top: 0.5rem;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+    }
+
+    button {
+      margin-top: 1rem;
+      padding: 0.7rem 1.5rem;
+      background: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #45a049;
+    }
+
+    #sentimentResult {
+      margin-top: 1rem;
+      font-weight: bold;
+    }
+
+    ul {
+      margin-top: 1rem;
+      padding-left: 1rem;
+    }
+
+    li {
+      margin-bottom: 1rem;
+      background: #f1f1f1;
+      padding: 0.7rem;
+      border-radius: 6px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Tamil & Thanglish Sentiment Analyzer</h1>
+
+  <div class="section">
+    <h2>Analyze a Single Comment</h2>
+    <textarea id="textInput" rows="4" placeholder="Enter Tamil or Thanglish comment..."></textarea>
+    <button onclick="analyzeText()">Analyze</button>
+    <div id="sentimentResult"></div>
+  </div>
+
+  <div class="section">
+    <h2>Analyze YouTube Video Comments</h2>
+    <input type="text" id="videoUrl" placeholder="Enter YouTube video URL" />
+    <button onclick="analyzeYouTube()">Analyze Video Comments</button>
+    <ul id="videoSentiments"></ul>
+  </div>
+
+  <script>
+    const apiBaseUrl = "http://127.0.0.1:8000";
+
+    async function analyzeText() {
+      const text = document.getElementById("textInput").value;
+      if (!text) return alert("Please enter some text");
+      
+      document.getElementById("sentimentResult").innerText = "Analyzing...";
+      try {
+        const response = await fetch(`${apiBaseUrl}/analyze`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ text })
+        });
+        const data = await response.json();
+        document.getElementById("sentimentResult").innerText = `Sentiment: ${data.prediction}`;
+      } catch {
+        document.getElementById("sentimentResult").innerText = "Error analyzing sentiment";
+      }
+    }
+
+    async function analyzeYouTube() {
+      const url = document.getElementById("videoUrl").value;
+      const list = document.getElementById("videoSentiments");
+      list.innerHTML = "Fetching comments...";
+      
+      try {
+        const response = await fetch(`${apiBaseUrl}/analyze_youtube`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ url })
+        });
+        const data = await response.json();
+        list.innerHTML = "";
+
+        if (data.results && data.results.length > 0) {
+          data.results.forEach(item => {
+            const li = document.createElement("li");
+            li.textContent = `Sentiment: ${item.sentiment} | ${item.comment}`;
+            list.appendChild(li);
+          });
+        } else {
+          list.innerHTML = "No comments found or failed to analyze.";
+        }
+      } catch {
+        list.innerHTML = "Failed to fetch or analyze comments.";
+      }
+    }
+  </script>
+</body>
+</html>
